@@ -14,7 +14,7 @@ class Sparse
 
 	public:
 		void create(Sparse *s);
-		void display();
+		friend std::ostream & operator<<(std::ostream &ost, Sparse &);
 		int get(int, int);
 		friend Sparse operator+(const Sparse &, const Sparse &);
 		~Sparse();
@@ -22,6 +22,11 @@ class Sparse
 
 Sparse operator+(const Sparse &s1, const Sparse &s2)
 {
+	if(s1.m!=s2.m || s1.n!=s2.n)
+	{
+		throw std::string("row x col, don't match");
+		return Sparse{};
+	}
 	Sparse to_return;
 	to_return.m=s1.m;
 	to_return.n=s1.n;
@@ -36,8 +41,6 @@ Sparse operator+(const Sparse &s1, const Sparse &s2)
 			to_return.e[k].Elements::i=s1.e[i].Elements::i;
 			to_return.e[k].Elements::j=s1.e[i].Elements::j;
 			to_return.e[k].Elements::k=s1.e[i].Elements::k + s2.e[j].Elements::k;
-			std::cout<<"s1 num: "<<s1.e[i].Elements::k<<std::endl;
-			std::cout<<"s2 num: "<<s2.e[j].Elements::k<<std::endl;
 			i++; j++;
 		} else if( s1.e[i].Elements::i==s2.e[j].Elements::i) { //if rows number is equal
 			if(s1.e[i].Elements::j>s2.e[j].Elements::j)
@@ -111,21 +114,22 @@ void Sparse::create(Sparse *s)
 		std::cout<<"Please enter the row, column and value of the number\n";
 		std::cin>>s->e[p].i>>s->e[p].j>>s->e[p].k;
 	}
-	std::cout<<"last element in s: "<<std::endl
-		<<s->e[s->num-1].i<<" "
-		<<s->e[s->num-1].j<<" "
-		<<s->e[s->num-1].k<<" "<<std::endl;
+//	std::cout<<"last element in s: "<<std::endl
+//		<<s->e[s->num-1].i<<" "
+//		<<s->e[s->num-1].j<<" "
+//		<<s->e[s->num-1].k<<" "<<std::endl;
 }
 
-void Sparse::display()
+std::ostream & operator<<(std::ostream & ost, Sparse &s)
 {
-	for(int i=0; i!=m; i++){
-		for(int j=0; j!=n; j++)
+	for(int i=0; i!=s.m; i++){
+		for(int j=0; j!=s.n; j++)
 		{
-			std::cout<<get(i,j)<<" ";
+			ost<<s.get(i,j)<<" ";
 		}
-		std::cout<<std::endl;
+		ost<<std::endl;
 	}
+	return ost;
 }
 
 int Sparse::get(int row, int col)
@@ -147,7 +151,7 @@ int Sparse::get(int row, int col)
 
 Sparse::~Sparse()
 {
-	delete e;
+	delete []e;
 }
 
 #endif
