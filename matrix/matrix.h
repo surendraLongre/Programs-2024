@@ -5,7 +5,7 @@
 template<class T>
 class Matrix
 {
-protected:
+public:
 	T *arr;
 	int mn{};
 	int length{};

@@ -50,7 +50,7 @@ T TriDiagonal<T>::get(int i, int j)
 			return 0;
 		else if(i==0)
 			return this->arr[j];
-		return this->arr[2+3*(i-1)+j];
+		return this->arr[2+3*(i-1)+1+j-i];
 	} catch(std::string str) {
 		std::cout<<"error: "<<str<<std::endl;
 	}
@@ -71,7 +71,7 @@ void TriDiagonal<T>::append(T var, int i, int j)
 			if(i==0)
 				this->arr[j]=var;
 			else{
-				this->arr[2+3*(i-1)+j]=var;
+				this->arr[2+3*(i-1)+1+j-i]=var;
 			}
 			this->length++;
 		} catch(std::string str){
