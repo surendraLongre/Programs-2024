@@ -21,6 +21,9 @@ class Stack
 		int pop();
 		bool isMatching(std::string); //for the parenthesis matching
 		bool complexMatching(std::string);
+		std::string InfixToPostfix(std::string);
+		friend int presidence(char ch);
+		int evalPostfix(std::string);
 };
 
 Stack::Stack()
@@ -98,6 +101,88 @@ bool Stack::complexMatching(std::string str) //parenthesis matching only if it's
 		}
 	}
 	return isEmpty();
+}
+
+bool isOperand(char ch)
+{
+	if(ch=='+' || ch=='-' || ch=='*' || ch=='/')
+		return false;
+	return true;
+}
+
+int presidence(char ch) 
+{
+	if(ch=='+' || ch=='-')
+		return 1;
+	else if(ch=='*' || ch=='/')
+		return 2;
+	return 15;
+}
+
+std::string Stack::InfixToPostfix(std::string str) //for converting infix to postfix
+{
+	std::string postfix{};
+	//loop through the string and check for presidence
+	for(auto c:str)
+	{
+		if(isOperand(c)) {
+			postfix+=c;
+			continue;
+		} else {
+popin: 			//append in the stack
+			if(isEmpty() || presidence(c)>presidence(char(head->data)))
+			{
+				append(int(c));
+				continue;
+			} else {
+popout:				//popout until the stack is empty || presidence(c) is not smaller than presidence(head->data);
+				postfix+=char(pop());
+				if(!isEmpty() && !presidence(c)>presidence(char(head->data)))
+					goto popout;
+				else
+					goto popin;
+
+			}
+		}
+	}
+popout2:
+	if(!isEmpty())
+		postfix+=char(pop());
+	if(!isEmpty())
+		goto popout2;
+	return postfix;
+}
+
+int operate(int num1, int num2, char c)
+{
+	switch(c){
+		case '+':
+			return num1+num2;
+		case '-':
+			return num2-num1;
+		case '*':
+			return num1*num2;
+		case '/':
+			return num2/num1;
+	}
+	return 0;
+}
+
+int Stack::evalPostfix(std::string str)
+{
+	int result{};
+	for(auto c:str) //loop through the string
+	{
+		if(isOperand(c)) {
+			append(int(c)-int('0'));
+			continue;
+		} else {
+			int num1=pop();
+			int num2=pop();
+			append(operate(num1, num2, c));
+		}
+	}
+	return head->data;
 }
 
 #endif
