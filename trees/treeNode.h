@@ -4,7 +4,7 @@
 class Node
 {
 	public:
-		char data;
+		int data;
 		Node* lchild;
 		Node* rchild;
 };
