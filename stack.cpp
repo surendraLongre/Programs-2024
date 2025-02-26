@@ -1,4 +1,5 @@
-#include<bits/stdc++.h>
+#include "stack.h"
+#include<iostream>
 
 class Node
 {

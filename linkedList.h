@@ -25,6 +25,7 @@ class LinkedList
 		T delete_at_ind(int);
 		void displayCircular();
 		void appendCircular(T);
+		bool is_empty();
 };
 
 template<typename T>
@@ -168,6 +169,12 @@ T LinkedList<T>::delete_at_ind(int ind)
 	//delete to_delete;
 	length--;
 	return to_return;
+}
+
+template<typename T>
+bool LinkedList<T>::is_empty()
+{
+	return get_length()==0;
 }
 
 #endif
